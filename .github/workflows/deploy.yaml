@@ -22,19 +22,8 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
           aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
           application_name: frontend
-          environment: frontend-env
+          environment_name: Frontend-env
           existing_bucket_name: elasticbeanstalk-ap-southeast-2-471112596323
           region: ap-southeast-2
           version_label: ${{ github.sha }}
           deployment_package: deploy.zip
-
-      - name: Debugging
-        run: |
-          echo "AWS Access Key: ${{ secrets.AWS_ACCESS_KEY }}"
-          echo "AWS Secret Key: ${{ secrets.AWS_SECRET_KEY }}"
-          echo "Application Name: frontend"
-          echo "Environment Name: Frontend-env"
-          echo "Existing Bucket Name: bucket_name"
-          echo "Region: ap-southeast-2"
-          echo "Version Label: ${{ github.sha }}"
-          echo "Deployment Package: deploy.zip"
