@@ -4,6 +4,11 @@ on:
     branches:
       - master
 
+env:
+  EB_APP_NAME: application-api
+  EB_ENV_NAME: application-env
+  EB_VERSION_LABEL: a-pm-${GITHUB_RUN_NUMBER}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,6 +17,9 @@ jobs:
       - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD}}
       - run: docker build -t abhisharma811/test-docker-react -f Dockerfile.dev .
       - run: docker run -e CI=true abhisharma811/test-docker-react npm test
+
+      - name: Generate deployment package
+        run: zip -r deploy.zip . -x \*.git\*
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
@@ -22,5 +30,6 @@ jobs:
           environment_name: Frontend-env
           existing_bucket_name: elasticbeanstalk-ap-south-1-471112596323
           region: ap-south-1
-          version_label: 12345
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
           use_existing_version_if_available: true
